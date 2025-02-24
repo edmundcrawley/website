@@ -1,9 +1,11 @@
-/* Define common values at the top */
+/* Base styles remain the same */
 :root {
     --main-font: -apple-system, BlinkMacSystemFont, "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --main-color: #222;
     --background-color: #eaebed;
     --link-color: darkblue;
+    --content-width: 47rem;
+    --mobile-padding: 1rem;
 }
 
 /* Basic reset */
@@ -13,37 +15,45 @@
     padding: 0;
 }
 
-/* Basic styles */
 body {
     background-color: var(--background-color);
     color: var(--main-color);
     font-family: var(--main-font);
     font-size: 15px;
     line-height: 1.45;
+    padding: 0;
+    margin: 0;
 }
 
 /* Layout */
-.container, section.text, article {
-    max-width: 47rem;
-    padding: 1rem;
+.container {
+    max-width: var(--content-width);
+    padding: var(--mobile-padding);
     margin: 0 auto;
+    width: 100%;
 }
 
 /* Header styles */
 #header {
     background-color: var(--background-color);
-    padding: 50px 0 10px;
+    padding: 50px var(--mobile-padding) 10px;
     text-align: left;
 }
 
-#header p {
-    color: rgba(0,0,0,.44);
-    margin: 10px 0;
+/* Profile image styling */
+.profile-image {
+    float: right;
+    margin-left: 50px;
+    margin-bottom: 20px;
+    max-width: 240px;
+    width: 100%;
+    height: auto;
 }
 
 /* Text elements */
-p {
-    margin: 1em 0;
+h1 {
+    font-size: 35px;
+    margin-bottom: 1rem;
 }
 
 h2 {
@@ -52,37 +62,125 @@ h2 {
     font-weight: bold;
 }
 
-/* Links */
-a {
-    color: var(--link-color);
+p {
+    margin: 1em 0;
 }
 
-a:hover {
-    text-decoration: underline;
+/* Paper sections */
+.paper-section {
+    margin-bottom: 2rem;
 }
 
-/* Utilities */
-.tab {
-    margin-left: 40px;
+details {
+    margin: 1rem 0;
 }
 
-.uppercase {
-    text-transform: uppercase;
+summary {
+    cursor: pointer;
+    padding: 0.5rem;
 }
 
-.lowercase {
-    text-transform: lowercase;
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+    /* Adjust header for mobile */
+    #header {
+        padding: 20px var(--mobile-padding);
+    }
+    
+    /* Make headshot smaller on mobile */
+    .profile-image {
+        float: none;
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 180px;
+    }
+    
+    /* Adjust text size for better mobile reading */
+    h1 {
+        font-size: 28px;
+        text-align: center;
+    }
+    
+    /* Make the tab class more mobile-friendly */
+    .tab {
+        margin-left: 20px;
+    }
+    
+    /* Adjust details/summary spacing */
+    details {
+        margin: 0.5rem 0;
+    }
+    
+    summary {
+        padding: 0.5rem 0;
+    }
 }
 
-/* Images */
-img {
-    max-width: 100%;
-    height: auto;
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+    /* Further reduce padding */
+    :root {
+        --mobile-padding: 0.75rem;
+    }
+    
+    /* Stack all content vertically */
+    .container {
+        padding: var(--mobile-padding);
+    }
+    
+    /* Make text more readable on very small screens */
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
 }
 
-/* Dividers */
-hr {
-    border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    margin: 2rem 0;
+/* Print styles */
+@media print {
+    body {
+        background: white;
+    }
+    
+    .container {
+        max-width: none;
+        width: 100%;
+    }
+    
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+}
+
+section.text {
+    max-width: 47rem;
+    margin: 0 auto;  /* This centers the content */
+    padding: 0 1rem; /* This adds space on the left and right */
+}
+
+/* Also make sure the existing container class has these properties */
+.container {
+    max-width: 47rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Adjust the header to match */
+#header {
+    background-color: #eaebed;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+/* Make sure all content sections respect the margins */
+.position-list,
+.papers-list,
+.policy-notes,
+.discussion-papers,
+.other-projects {
+    margin: 0 auto;
+    width: 100%;
 }
