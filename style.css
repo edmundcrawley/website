@@ -43,10 +43,10 @@ body {
 /* Profile image styling */
 .profile-image {
     float: right;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-bottom: 20px;
     max-width: 240px;
-    width: 100%;
+    width: auto;
     height: auto;
 }
 
@@ -165,6 +165,7 @@ section.text {
     max-width: 47rem;
     margin: 0 auto;
     padding: 0 1rem;
+    width: auto; /* This ensures it doesn't stretch unnecessarily */
 }
 
 /* Adjust the header to match */
@@ -183,4 +184,16 @@ section.text {
 .other-projects {
     margin: 0 auto;
     width: 100%;
+}
+
+/* Add a specific override for larger screens */
+@media screen and (min-width: 768px) {
+    .profile-image {
+        width: 240px; /* Fixed width on larger screens */
+    }
+    
+    /* Adjust container width for desktop if needed */
+    .container, section.text {
+        padding: 0 2rem; /* Slightly larger padding on desktop */
+    }
 }
