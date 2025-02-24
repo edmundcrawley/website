@@ -242,3 +242,161 @@ summary:hover {
     background-color: transparent; /* Remove hover background color */
     text-decoration: underline; /* Optional: add underline on hover for feedback */
 }
+
+/* Add this to your style.css file */
+
+/* Make all containers have consistent width and alignment */
+.container {
+  max-width: 47rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: auto;
+}
+
+/* Ensure consistent spacing between sections */
+#header, section.text {
+  width: 100%;
+}
+
+/* Remove any extra padding that may cause misalignment */
+#header h1, #header h2, 
+#header p, section.text h2 {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* Make sure all content sections have consistent margins */
+.position-list,
+.papers-list,
+.policy-notes,
+.discussion-papers,
+.other-projects,
+.profile-header {
+  margin: 0;
+  width: 100%;
+}
+
+/* Ensure proper nesting of containers */
+section.text .container {
+  padding: 0;
+}
+
+/* Maintain mobile responsiveness */
+@media screen and (min-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Reset container styles to ensure consistent alignment */
+.container {
+  max-width: 47rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  box-sizing: border-box;
+}
+
+/* Remove any extra padding or margin that might cause misalignment */
+#header .container,
+section.text .container {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Force all headings to align properly */
+h1, h2, h3, p {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Make sure nested containers don't double up on padding */
+section.text {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Override any responsive adjustments that might affect alignment */
+@media screen and (min-width: 768px) {
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Debug outline - uncomment to see container boundaries */
+/*
+.container {
+  border: 1px solid red;
+}
+#header, section.text {
+  border: 1px solid blue;
+}
+*/
+
+/* Reset and standardize container styles across the entire site */
+.container {
+  max-width: 60rem; /* Wider content area */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  box-sizing: border-box;
+}
+
+/* Ensure the text section container matches exactly */
+section.text {
+  padding: 0 !important;
+  max-width: none !important; /* Remove any max-width on the section itself */
+  margin: 0 !important;
+}
+
+section.text .container {
+  max-width: 60rem; /* Match the header container */
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Standardize section margins and paddings */
+.position-list,
+.papers-list,
+.policy-notes,
+.discussion-papers,
+.other-projects {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+/* Fix heading and paragraph margin/padding to prevent misalignment */
+h1, h2, h3, h4, h5, h6, p {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Responsive adaptations */
+@media screen and (max-width: 768px) {
+  .container, section.text .container {
+    max-width: 100%;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Debugging - uncomment to see container boundaries */
+/*
+.container {
+  border: 1px solid red;
+}
+section.text {
+  border: 1px solid blue;
+}
+section.text .container {
+  border: 1px solid green;
+}
+*/
