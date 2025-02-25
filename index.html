@@ -58,6 +58,7 @@
     </script>
 </head>
 
+
 <body>
     <div id="header">
         <div class="container">
@@ -277,5 +278,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+    <!-- Add the structured data script before closing body -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof bibtexEntries !== 'undefined') {
+                let structuredDataList = [];
+
+                for (let key in bibtexEntries) {
+                    let entry = bibtexEntries[key];
+
+                    // Extract metadata using regex
+                    let titleMatch = entry.match(/title={(.*?)}/);
+                    let title = titleMatch ? titleMatch[1] : "Unknown Title";
+
+                    let authorMatch = entry.match(/author={(.*?)}/);
+                    let authors = authorMatch ? authorMatch[1].split(' and ') : ["Unknown Author"];
+
+                    let yearMatch = entry.match(/year={(.*?)}/);
+                    let year = yearMatch ? yearMatch[1] : "Unknown Year";
+
+                    let urlMatch = entry.match(/url={(.*?)}/);
+                    let url = urlMatch ? urlMatch[1] : "";
+
+                    // Generate structured data
+                    let structuredData = {
+                        "@context": "https://schema.org",
+                        "@type": "ScholarlyArticle",
+                        "headline": title,
+                        "name": title,
+                        "author": authors.map(name => ({
+                            "@type": "Person",
+                            "name": name.trim()
+                        })),
+                        "datePublished": year,
+                        "url": url,
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "Federal Reserve Board"
+                        }
+                    };
+
+                    structuredDataList.push(structuredData);
+                }
+
+                // Inject structured data into <head>
+                if (structuredDataList.length > 0) {
+                    let scriptTag = document.createElement('script');
+                    scriptTag.type = 'application/ld+json';
+                    scriptTag.textContent = JSON.stringify(structuredDataList, null, 2);
+                    document.head.appendChild(scriptTag);
+                }
+            }
+        });
+    </script>
+</body>
+
 </body>
 </html>
