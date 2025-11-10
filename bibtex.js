@@ -94,8 +94,8 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
   author={Crawley, Edmund},
   journal={Economic Theory Bulletin},
   year={2025},
+  month={March}
   DOI = {https://doi.org/10.1007/s40505-025-00290-4}
-  note={Forthcoming}
 }`,
     'crawley2023svbfailure': `@techreport{crawley2023svbfailure,
   title={Failure of Silicon Valley Bank Reduced Local Consumer Spending but Had Limited Effect on Aggregate Spending},
