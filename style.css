@@ -165,6 +165,20 @@ hr {
     line-height: 1.4;
 }
 
+.paper-figure {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0.75rem 0;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    transition: border-color 0.3s ease;
+}
+
+[data-theme="dark"] .paper-figure {
+    filter: invert(1) hue-rotate(180deg);
+}
+
 /* ==========================================================================
    8. Details / Summary (Abstracts, BibTeX)
    ========================================================================== */
