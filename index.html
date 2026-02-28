@@ -48,6 +48,18 @@
     <link href="style.css" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
+    <!-- Theme detection (in head to prevent flash of wrong theme) -->
+    <script>
+        (function() {
+            var saved = localStorage.getItem('theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
     <!-- Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119889944-1"></script>
     <script>
@@ -60,6 +72,24 @@
 
 
 <body>
+    <!-- Dark/Light mode toggle -->
+    <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
     <div id="header">
         <div class="container">
             <img src="headshot_small.jpg" alt="Edmund S. Crawley" class="profile-image">
@@ -82,10 +112,10 @@
             <hr>
             <h2>Positions</h2>
             <div class="position-list">
-            <p><h2>2019-present <span style="font-weight:normal">Economist, Federal Reserve Board</span></h2></p>
-            <p><h2>2014-2019 <span style="font-weight:normal">Ph.D. Candidate, Johns Hopkins, Department of Economics</span></h2></p>
-            <p><h2>2012-2014 <span style="font-weight:normal">Officer, International Monetary Fund</span></h2></p>
-            <p><h2>2005-2009 <span style="font-weight:normal">Vice President, Nomura International Plc.</span></h2></p>
+            <p><h2>2019-present <span class="coauthors">Economist, Federal Reserve Board</span></h2></p>
+            <p><h2>2014-2019 <span class="coauthors">Ph.D. Candidate, Johns Hopkins, Department of Economics</span></h2></p>
+            <p><h2>2012-2014 <span class="coauthors">Officer, International Monetary Fund</span></h2></p>
+            <p><h2>2005-2009 <span class="coauthors">Vice President, Nomura International Plc.</span></h2></p>
         </div>
         
         <hr>
@@ -105,7 +135,7 @@
             </div>
 
             <div class="paper">
-                <h2>"Welfare and Spending Effects of Consumption Stimulus Policies" (<a href="HAFiscal.pdf">Latest pdf</a>, <a href="https://www.federalreserve.gov/econres/feds/welfare-and-spending-effects-of-consumption-stimulus-policies.htm">FEDS Working Paper</a>) <span style="font-weight:normal">(with Chris Carroll, Ivan Frankovic, and Håkon Tretvoll)</span></h2>
+                <h2>"Welfare and Spending Effects of Consumption Stimulus Policies" (<a href="HAFiscal.pdf">Latest pdf</a>, <a href="https://www.federalreserve.gov/econres/feds/welfare-and-spending-effects-of-consumption-stimulus-policies.htm">FEDS Working Paper</a>) <span class="coauthors">(with Chris Carroll, Ivan Frankovic, and Håkon Tretvoll)</span></h2>
                 <p><a >Conditionally accepted at Quantitative Economics</a></p>
                 <details>
                     <summary class="tab">Abstract</summary>
@@ -119,7 +149,7 @@
             </div>
 
             <div class="paper">
-                <h2>"A Parsimonious Model of Idiosyncratic Income" (<a href="A_Parsimonious_Model_of_Idiosyncratic_Income.pdf">Latest pdf</a>, <a href="https://www.federalreserve.gov/econres/feds/a-parsimonious-model-of-idiosyncratic-income.htm">FEDS Working Paper</a>) <span style="font-weight:normal">(with Martin B Holm and Håkon Tretvoll)</span></h2>
+                <h2>"A Parsimonious Model of Idiosyncratic Income" (<a href="A_Parsimonious_Model_of_Idiosyncratic_Income.pdf">Latest pdf</a>, <a href="https://www.federalreserve.gov/econres/feds/a-parsimonious-model-of-idiosyncratic-income.htm">FEDS Working Paper</a>) <span class="coauthors">(with Martin B Holm and Håkon Tretvoll)</span></h2>
                 <p><a >Conditionally accepted at International Economic Review</a></p>
                 <details>
                     <summary class="tab">Abstract</summary>
@@ -136,7 +166,7 @@
         <h2>Published and Forthcoming Papers</h2>
 
             <div class="paper">
-                <h2>"Income Shocks and their Transmission into Consumption" (<a href="https://www.federalreserve.gov/econres/feds/files/2024038pap.pdf">FEDS Working Paper</a>) <span style="font-weight:normal">(with Alexandros Theloudis)</span></h2>
+                <h2>"Income Shocks and their Transmission into Consumption" (<a href="https://www.federalreserve.gov/econres/feds/files/2024038pap.pdf">FEDS Working Paper</a>) <span class="coauthors">(with Alexandros Theloudis)</span></h2>
                 <details>
                     <summary class="tab">This review will appear in the Encyclopedia of Consumption.</summary>
                 </details>
@@ -162,7 +192,7 @@
             </div>
 
             <div class="paper">
-                <h2>"Consumption Heterogeneity: Micro Drivers and Macro Implications" (<a href="ConsumptionHeterogeneity.pdf">Paper</a>, <a href="https://github.com/edmundcrawley/IncomeUncertaintyGit">Code</a>) <span style="font-weight:normal">(with Andreas Kuchler)</span></h2>
+                <h2>"Consumption Heterogeneity: Micro Drivers and Macro Implications" (<a href="ConsumptionHeterogeneity.pdf">Paper</a>, <a href="https://github.com/edmundcrawley/IncomeUncertaintyGit">Code</a>) <span class="coauthors">(with Andreas Kuchler)</span></h2>
 <p><a href="https://www.aeaweb.org/articles?id=10.1257/mac.20200352&&from=f">American Economic Journal: Macroeconomics, Volume 15, No. 1, January 2023</a></p>
                 <details>
                     <summary class="tab">Abstract</summary>
@@ -177,7 +207,7 @@
 
 
             <div class="paper">
-                <h2>"Modeling the Consumption Response to the CARES Act" (<a href="ConsumptionResponse.pdf">Paper</a>, <a href="https://github.com/econ-ark/Pandemic">Code</a>) <span style="font-weight:normal">(with Christopher D. Carroll, Jiri Slacalek, and Matthew N. White)</span></h2>
+                <h2>"Modeling the Consumption Response to the CARES Act" (<a href="ConsumptionResponse.pdf">Paper</a>, <a href="https://github.com/econ-ark/Pandemic">Code</a>) <span class="coauthors">(with Christopher D. Carroll, Jiri Slacalek, and Matthew N. White)</span></h2>
                 <p><a href="https://econ-ark.org/pandemicdashboard">Interactive Jupyter Notebook</a></p>
                 <p><a href="https://www.ijcb.org/journal/ijcb21q1a4.htm">International Journal of Central Banking, Issue 67, March 2021</a></p>
                 <details>
@@ -192,7 +222,7 @@
             </div>
 
             <div class="paper">
-                <h2>"Sticky Expectations and Consumption Dynamics" (<a href="StickyE.pdf">Paper</a>, <a href="cAndCwithStickyE.zip">Code</a>) <span style="font-weight:normal">(with Christopher D. Carroll, Jiri Slacalek, Kiichi Tokuoka and Matthew N. White)</span></h2>
+                <h2>"Sticky Expectations and Consumption Dynamics" (<a href="StickyE.pdf">Paper</a>, <a href="cAndCwithStickyE.zip">Code</a>) <span class="coauthors">(with Christopher D. Carroll, Jiri Slacalek, Kiichi Tokuoka and Matthew N. White)</span></h2>
                 <p><a href="https://www.aeaweb.org/articles?id=10.1257/mac.20180286">American Economic Journal: Macroeconomics, Volume 12, No. 3, July 2020</a></p>
                 <details>
                     <summary class="tab">Abstract</summary>
@@ -205,7 +235,7 @@
     </details>
             </div>
             <div class="paper">
-                <h2>"In Search of Lost Time Aggregation" (<a href="InSearchOfLostTime.pdf">Paper</a>, <a href="https://github.com/edmundcrawley/BPP_PSID_TimeAgg">Code</a>) <span style="font-weight:normal"></span></h2>
+                <h2>"In Search of Lost Time Aggregation" (<a href="InSearchOfLostTime.pdf">Paper</a>, <a href="https://github.com/edmundcrawley/BPP_PSID_TimeAgg">Code</a>) <span class="coauthors"></span></h2>
                 <p><a href="https://doi.org/10.1016/j.econlet.2020.108998">Economics Letters, Volume 189, April 2020, Article 108998</a></p>
                 <details>
                     <summary class="tab">Abstract</summary>
@@ -223,48 +253,55 @@
         <hr>
         <h2>Policy Notes</h2>
         <div class="policy-notes">
-            <h2>"Failure of Silicon Valley Bank Reduced Local Consumer Spending but Had Limited Effect on Aggregate Spending" <span style="font-weight:normal">(with Taeyoung Doh and Minchul Shin)</span></h2>
+            <div class="paper">
+            <h2>"Failure of Silicon Valley Bank Reduced Local Consumer Spending but Had Limited Effect on Aggregate Spending" <span class="coauthors">(with Taeyoung Doh and Minchul Shin)</span></h2>
                 <p><a href="https://www.kansascityfed.org/research/economic-bulletin/failure-of-silicon-valley-bank-reduced-local-consumer-spending-but-had-limited-effect-on-aggregate-spending/">Kansas City Fed Economic Bulletin September 2023</a></p>
     <details>
         <summary class="tab">BibTeX</summary>
     <pre class="bibtex-content" id="bibtex-crawley2023svbfailure"></pre>
         <button class="copy-button" onclick="copyBibtex('crawley2023svbfailure', this)">Copy BibTeX</button>
     </details>
+            </div>
 
-
-            <h2>"Winners and losers from recent asset price changes" <span style="font-weight:normal">(with Will Gamber)</span></h2>
+            <div class="paper">
+            <h2>"Winners and losers from recent asset price changes" <span class="coauthors">(with Will Gamber)</span></h2>
                 <p><a href="https://doi.org/10.17016/2380-7172.3287">FEDS Note May 2023</a></p>
     <details>
         <summary class="tab">BibTeX</summary>
     <pre class="bibtex-content" id="bibtex-crawley2023winners"></pre>
         <button class="copy-button" onclick="copyBibtex('crawley2023winners', this)">Copy BibTeX</button>
     </details>
+            </div>
 
-            <h2>"Substitutability between Balance Sheet Reductions and Policy Rate Hikes: Some Illustrations and a Discussion" <span style="font-weight:normal">(with Etienne Gagnon, James Hebden, and James Trevino)</span></h2>
+            <div class="paper">
+            <h2>"Substitutability between Balance Sheet Reductions and Policy Rate Hikes: Some Illustrations and a Discussion" <span class="coauthors">(with Etienne Gagnon, James Hebden, and James Trevino)</span></h2>
                 <p><a href="https://doi.org/10.17016/2380-7172.3147">FEDS Note June 2022</a></p>
     <details>
         <summary class="tab">BibTeX</summary>
     <pre class="bibtex-content" id="bibtex-crawley2022substitutability"></pre>
         <button class="copy-button" onclick="copyBibtex('crawley2022substitutability', this)">Copy BibTeX</button>
     </details>
+            </div>
         </div>
 
         <hr>
         <h2>Discussion Papers</h2>
         <div class="discussion-papers">
-            <h2>Discussion of 'When Inequality Matters for Macro and Macro Matters for Inequality' <span style="font-weight:normal">(with Christopher D. Carroll) </span></h2>
+            <div class="paper">
+            <h2>Discussion of 'When Inequality Matters for Macro and Macro Matters for Inequality' <span class="coauthors">(with Christopher D. Carroll) </span></h2>
                 <p><a href="https://doi.org/10.1086/696047">NBER Macroeconomics Annual 2017, volume 32</a></p>
     <details>
         <summary class="tab">BibTeX</summary>
     <pre class="bibtex-content" id="bibtex-carroll2018comment"></pre>
         <button class="copy-button" onclick="copyBibtex('carroll2018comment', this)">Copy BibTeX</button>
     </details>
+            </div>
         </div>
 
         <hr>
         <h2>Other Projects</h2>
         <div class="other-projects">
-            <h2><span style="font-weight:normal">I am an active contributor to the </span>Econ-ARK project (<a href="https://econ-ark.org/">website</a>)</h2>
+            <h2><span class="coauthors">I am an active contributor to the </span>Econ-ARK project (<a href="https://econ-ark.org/">website</a>)</h2>
         </div>
     </section>
 <script src="bibtex.js"></script>
@@ -334,7 +371,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     </script>
-</body>
 
+    <!-- Theme toggle and scroll animations -->
+    <script>
+        // Dark/light mode toggle
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = (current === 'dark') ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
+        // Scroll-triggered fade-in for paper cards
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.paper').forEach(function(paper) {
+            observer.observe(paper);
+        });
+    </script>
 </body>
 </html>

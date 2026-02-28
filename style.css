@@ -1,402 +1,439 @@
-/* Base styles remain the same */
+/* ==========================================================================
+   1. CSS Custom Properties — Light Theme (default)
+   ========================================================================== */
+
 :root {
-    --main-font: -apple-system, BlinkMacSystemFont, "Roboto", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --main-color: #222;
-    --background-color: #eaebed;
-    --link-color: darkblue;
-    --content-width: 47rem;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    --color-text: #1a1a1a;
+    --color-text-secondary: #555;
+    --color-bg: #f5f5f7;
+    --color-bg-card: #ffffff;
+    --color-accent: #2a6b96;
+    --color-accent-hover: #1e4f6e;
+    --color-border: #e0e0e0;
+    --color-shadow: rgba(0, 0, 0, 0.06);
+    --color-bibtex-bg: #f0f0f2;
+
+    --content-width: 60rem;
     --mobile-padding: 1rem;
 }
 
-/* Basic reset */
-* {
+/* ==========================================================================
+   2. Dark Theme Variables
+   ========================================================================== */
+
+[data-theme="dark"] {
+    --color-text: #e0e0e0;
+    --color-text-secondary: #a0a0a0;
+    --color-bg: #1a1a2e;
+    --color-bg-card: #242440;
+    --color-accent: #5ba3d9;
+    --color-accent-hover: #7dbde8;
+    --color-border: #3a3a5c;
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-bibtex-bg: #2e2e4a;
+}
+
+/* ==========================================================================
+   3. Base Reset & Body
+   ========================================================================== */
+
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--main-color);
-    font-family: var(--main-font);
-    font-size: 15px;
-    line-height: 1.45;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================================================
+   4. Layout
+   ========================================================================== */
+
+.container {
+    max-width: var(--content-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+section.text {
+    width: 100%;
     padding: 0;
     margin: 0;
 }
 
-/* Layout */
-.container {
-    max-width: var(--content-width);
-    padding: var(--mobile-padding);
-    margin: 0 auto;
-    width: 100%;
+section.text > .container {
+    padding-top: 0;
 }
 
-/* Header styles */
+/* ==========================================================================
+   5. Header & Profile Image
+   ========================================================================== */
+
 #header {
-    background-color: var(--background-color);
-    padding: 50px var(--mobile-padding) 10px;
-    text-align: left;
+    background-color: var(--color-bg);
+    padding: 50px 0 10px;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-/* Profile image styling */
 .profile-image {
     float: right;
-    margin-left: 20px;
+    margin-left: 24px;
     margin-bottom: 20px;
-    max-width: 240px;
-    width: auto;
+    width: 240px;
     height: auto;
+    border-radius: 12px;
+    border: 3px solid var(--color-accent);
+    transition: border-color 0.3s ease;
 }
 
-/* Text elements */
+/* ==========================================================================
+   6. Typography
+   ========================================================================== */
+
 h1 {
-    font-size: 35px;
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
     margin-bottom: 1rem;
+    color: var(--color-text);
 }
 
 h2 {
+    font-family: var(--font-heading);
     font-size: 1.5em;
+    font-weight: 600;
     margin: 0.83em 0;
-    font-weight: bold;
+    color: var(--color-text);
 }
 
 p {
     margin: 1em 0;
 }
 
-/* Paper sections */
-.paper-section {
-    margin-bottom: 2rem;
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
-details {
-    margin: 1rem 0;
+a:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
 }
 
-summary {
-    cursor: pointer;
-    padding: 0.5rem;
+.coauthors {
+    font-weight: normal;
 }
 
-/* Mobile styles */
-@media screen and (max-width: 768px) {
-    /* Adjust header for mobile */
-    #header {
-        padding: 20px var(--mobile-padding);
-    }
-    
-    /* Make headshot smaller on mobile */
-    .profile-image {
-        float: none;
-        display: block;
-        margin: 0 auto 20px;
-        max-width: 180px;
-    }
-    
-    /* Adjust text size for better mobile reading */
-    h1 {
-        font-size: 28px;
-        text-align: center;
-    }
-    
-    /* Make the tab class more mobile-friendly */
-    .tab {
-        margin-left: 20px;
-    }
-    
-    /* Adjust details/summary spacing */
-    details {
-        margin: 0.5rem 0;
-    }
-    
-    summary {
-        padding: 0.5rem 0;
-    }
-}
-
-/* Extra small devices */
-@media screen and (max-width: 480px) {
-    /* Further reduce padding */
-    :root {
-        --mobile-padding: 0.75rem;
-    }
-    
-    /* Stack all content vertically */
-    .container {
-        padding: var(--mobile-padding);
-    }
-    
-    /* Make text more readable on very small screens */
-    body {
-        font-size: 14px;
-    }
-    
-    h1 {
-        font-size: 24px;
-    }
-}
-
-/* Print styles */
-@media print {
-    body {
-        background: white;
-    }
-    
-    .container {
-        max-width: none;
-        width: 100%;
-    }
-    
-    a[href]:after {
-        content: " (" attr(href) ")";
-    }
-}
-
-section.text {
-    max-width: 47rem;
-    margin: 0 auto;  /* This centers the content */
-    padding: 0 1rem; /* This adds space on the left and right */
-}
-
-/* Also make sure the existing container class has these properties */
-.container {
-    max-width: 47rem;
-    margin: 0 auto;
-    padding: 0 1rem;
-    width: auto; /* This ensures it doesn't stretch unnecessarily */
-}
-
-/* Adjust the header to match */
-#header {
-    background-color: #eaebed;
-    padding-top: 50px;
-    padding-bottom: 10px;
-    width: 100%;
-}
-
-/* Make sure all content sections respect the margins */
-.position-list,
-.papers-list,
-.policy-notes,
-.discussion-papers,
-.other-projects {
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Add a specific override for larger screens */
-@media screen and (min-width: 768px) {
-    .profile-image {
-        width: 240px; /* Fixed width on larger screens */
-    }
-    
-    /* Adjust container width for desktop if needed */
-    .container, section.text {
-        padding: 0 2rem; /* Slightly larger padding on desktop */
-    }
-}
-
-/* BibTeX styling */
-.bibtex-content {
-    background: #f5f5f5;
-    padding: 10px;
-    border-radius: 4px;
-    font-family: monospace;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    margin: 10px 0;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.copy-button {
-    background: #4a6fa5;
-    color: white;
+hr {
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8em;
-    margin-top: 5px;
+    border-top: 1px solid var(--color-border);
+    margin: 2rem 0;
+    transition: border-color 0.3s ease;
 }
 
-.copy-button:hover {
-    background: #3a5f95;
+/* ==========================================================================
+   7. Paper Cards
+   ========================================================================== */
+
+.paper {
+    background: var(--color-bg-card);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px var(--color-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, opacity 0.5s ease;
 }
 
-/* Make the details/summary more visually appealing */
+.paper.visible:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.paper h2 {
+    font-size: 1.15em;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   8. Details / Summary (Abstracts, BibTeX)
+   ========================================================================== */
+
 details {
     margin: 0.5rem 0;
 }
 
 summary {
     cursor: pointer;
-    padding: 0.5rem 0; /* Keep vertical padding but remove horizontal */
-    background-color: transparent; /* Remove background color */
-    border-radius: 0;
+    padding: 0.4rem 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9em;
+    transition: color 0.2s ease;
 }
 
 summary:hover {
-    background-color: transparent; /* Remove hover background color */
-    text-decoration: underline; /* Optional: add underline on hover for feedback */
+    color: var(--color-accent);
 }
 
-/* Add this to your style.css file */
-
-/* Make all containers have consistent width and alignment */
-.container {
-  max-width: 47rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-  width: auto;
+summary.tab {
+    /* keep for backwards compat with existing markup */
 }
 
-/* Ensure consistent spacing between sections */
-#header, section.text {
-  width: 100%;
+p.tab {
+    margin-left: 0;
+    padding: 0.5rem 0;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
 }
 
-/* Remove any extra padding that may cause misalignment */
-#header h1, #header h2, 
-#header p, section.text h2 {
-  padding-left: 0;
-  margin-left: 0;
+.bibtex-content {
+    background: var(--color-bibtex-bg);
+    color: var(--color-text);
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.85em;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Make sure all content sections have consistent margins */
-.position-list,
-.papers-list,
-.policy-notes,
-.discussion-papers,
-.other-projects,
-.profile-header {
-  margin: 0;
-  width: 100%;
+/* ==========================================================================
+   9. Buttons
+   ========================================================================== */
+
+.copy-button {
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-family: var(--font-body);
+    margin-top: 6px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Ensure proper nesting of containers */
-section.text .container {
-  padding: 0;
+.copy-button:hover {
+    background: var(--color-accent-hover);
 }
 
-/* Maintain mobile responsiveness */
-@media screen and (min-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
+.copy-button:active {
+    transform: scale(0.97);
 }
 
-/* Reset container styles to ensure consistent alignment */
-.container {
-  max-width: 47rem;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-  box-sizing: border-box;
+/* ==========================================================================
+   10. Dark Mode Toggle
+   ========================================================================== */
+
+#theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Remove any extra padding or margin that might cause misalignment */
-#header .container,
-section.text .container {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+#theme-toggle:hover {
+    box-shadow: 0 4px 14px var(--color-shadow);
 }
 
-/* Force all headings to align properly */
-h1, h2, h3, p {
-  padding-left: 0 !important;
-  margin-left: 0 !important;
+#theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-text);
+    fill: none;
+    transition: stroke 0.3s ease;
 }
 
-/* Make sure nested containers don't double up on padding */
-section.text {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+/* Light mode: show moon, hide sun */
+#sun-icon { display: none; }
+#moon-icon { display: block; }
+
+/* Dark mode: show sun, hide moon */
+[data-theme="dark"] #sun-icon { display: block; }
+[data-theme="dark"] #moon-icon { display: none; }
+
+/* ==========================================================================
+   11. Scroll Animations
+   ========================================================================== */
+
+.paper {
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-/* Override any responsive adjustments that might affect alignment */
-@media screen and (min-width: 768px) {
-  .container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
+.paper.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Debug outline - uncomment to see container boundaries */
-/*
-.container {
-  border: 1px solid red;
-}
-#header, section.text {
-  border: 1px solid blue;
-}
-*/
+/* Stagger animation for cards that are visible on initial load */
+.paper.visible:nth-child(1) { transition-delay: 0s; }
+.paper.visible:nth-child(2) { transition-delay: 0.1s; }
+.paper.visible:nth-child(3) { transition-delay: 0.15s; }
 
-/* Reset and standardize container styles across the entire site */
-.container {
-  max-width: 60rem; /* Wider content area */
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-  box-sizing: border-box;
-}
+/* ==========================================================================
+   12. Section Containers
+   ========================================================================== */
 
-/* Ensure the text section container matches exactly */
-section.text {
-  padding: 0 !important;
-  max-width: none !important; /* Remove any max-width on the section itself */
-  margin: 0 !important;
-}
-
-section.text .container {
-  max-width: 60rem; /* Match the header container */
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-}
-
-/* Standardize section margins and paddings */
 .position-list,
 .papers-list,
 .policy-notes,
 .discussion-papers,
 .other-projects {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
+    width: 100%;
 }
 
-/* Fix heading and paragraph margin/padding to prevent misalignment */
-h1, h2, h3, h4, h5, h6, p {
-  padding-left: 0 !important;
-  margin-left: 0 !important;
+/* Positions timeline styling */
+.position-list h2 {
+    font-size: 1.1em;
+    margin: 0.4em 0;
 }
 
-/* Responsive adaptations */
+/* ==========================================================================
+   13. Responsive — Tablet (≤768px)
+   ========================================================================== */
+
 @media screen and (max-width: 768px) {
-  .container, section.text .container {
-    max-width: 100%;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
+    #header {
+        padding: 20px 0;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .profile-image {
+        float: none;
+        display: block;
+        margin: 0 auto 20px;
+        max-width: 180px;
+        width: 180px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+        text-align: center;
+    }
+
+    .paper {
+        padding: 1rem 1.25rem;
+    }
+
+    #theme-toggle {
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    #theme-toggle svg {
+        width: 18px;
+        height: 18px;
+    }
 }
 
-/* Debugging - uncomment to see container boundaries */
-/*
-.container {
-  border: 1px solid red;
+/* ==========================================================================
+   14. Responsive — Small Mobile (≤480px)
+   ========================================================================== */
+
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .paper {
+        padding: 0.85rem 1rem;
+        border-radius: 6px;
+    }
 }
-section.text {
-  border: 1px solid blue;
+
+/* ==========================================================================
+   15. Accessibility — Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .paper {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .paper.visible:hover {
+        transform: none;
+    }
+
+    body, #header, .profile-image, hr, .bibtex-content,
+    #theme-toggle, a, .copy-button, summary {
+        transition: none;
+    }
 }
-section.text .container {
-  border: 1px solid green;
+
+/* ==========================================================================
+   16. Print Styles
+   ========================================================================== */
+
+@media print {
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+
+    .container {
+        max-width: none;
+        width: 100%;
+    }
+
+    .paper {
+        opacity: 1;
+        transform: none;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+
+    #theme-toggle {
+        display: none;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
 }
-*/
