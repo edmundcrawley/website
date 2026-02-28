@@ -94,8 +94,6 @@ section.text > .container {
     width: 240px;
     height: auto;
     border-radius: 12px;
-    border: 3px solid var(--color-accent);
-    transition: border-color 0.3s ease;
 }
 
 /* ==========================================================================
