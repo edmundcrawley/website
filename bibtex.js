@@ -34,17 +34,14 @@ const bibtexEntries = {
   url={https://doi.org/10.17016/FEDS.2023.002},
   doi={10.17016/FEDS.2023.002}
 }`,
-    'crawley2022parsimonious': `@techreport{crawley2022parsimonious,
+    'crawley2022parsimonious': `@article{crawley2025parsimonious,
   title={A Parsimonious Model of Idiosyncratic Income},
   author={Crawley, Edmund and Holm, Martin Blomhoff and Tretvoll, H{\aa}kon},
-  year={2022},
-  month={May},
-  number={2022-026},
-  series={Finance and Economics Discussion Series},
-  institution={Board of Governors of the Federal Reserve System},
-  type={Finance and Economics Discussion Series},
-  url={https://doi.org/10.17016/FEDS.2022.026},
-  doi={10.17016/FEDS.2022.026}
+  journal={International Economic Review},
+  year={2025},
+  note={Forthcoming},
+  doi={10.1111/iere.70041},
+  url={https://doi.org/10.1111/iere.70041}
 }`,
     'crawley2023consumption': `@article{crawley2023consumption,
 Author = {Crawley, Edmund and Kuchler, Andreas},
