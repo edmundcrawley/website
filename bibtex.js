@@ -29,12 +29,11 @@ const bibtexEntries = {
   url={https://doi.org/10.17016/FEDS.2023.002},
   doi={10.17016/FEDS.2023.002}
 }`,
-    'crawley2022parsimonious': `@article{crawley2025parsimonious,
+    'crawley2022parsimonious': `@article{crawley2026parsimonious,
   title={A Parsimonious Model of Idiosyncratic Income},
   author={Crawley, Edmund and Holm, Martin Blomhoff and Tretvoll, H{\aa}kon},
   journal={International Economic Review},
-  year={2025},
-  note={Forthcoming},
+  year={2026},
   doi={10.1111/iere.70041},
   url={https://doi.org/10.1111/iere.70041}
 }`,
