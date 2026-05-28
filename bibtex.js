@@ -7,7 +7,7 @@ const bibtexEntries = {
   note = {Manuscript}
 }`,
     'crawley2024income': `@techreport{crawley2024income,
-  title={Income Shocks and Their Transmission into Consumption},
+  title={Income Shocks and their Transmission into Consumption},
   author={Crawley, Edmund and Theloudis, Alexandros},
   year={2024},
   number={2024-038},
@@ -19,7 +19,7 @@ const bibtexEntries = {
 }`,
     'carroll2023welfare': `@techreport{carroll2023welfare,
   title={Welfare and Spending Effects of Consumption Stimulus Policies},
-  author={Carroll, Christopher and Crawley, Edmund and Frankovic, Ivan and Tretvoll, H{\aa}kon},
+  author={Carroll, Christopher and Crawley, Edmund and Frankovic, Ivan and Tretvoll, H{\\aa}kon},
   year={2023},
   month={January},
   number={2023-002},
@@ -31,7 +31,7 @@ const bibtexEntries = {
 }`,
     'crawley2022parsimonious': `@article{crawley2026parsimonious,
   title={A Parsimonious Model of Idiosyncratic Income},
-  author={Crawley, Edmund and Holm, Martin Blomhoff and Tretvoll, H{\aa}kon},
+  author={Crawley, Edmund and Holm, Martin Blomhoff and Tretvoll, H{\\aa}kon},
   journal={International Economic Review},
   year={2026},
   doi={10.1111/iere.70041},
@@ -85,8 +85,9 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
   author={Crawley, Edmund},
   journal={Economic Theory Bulletin},
   year={2025},
-  month={March}
-  DOI = {https://doi.org/10.1007/s40505-025-00290-4}
+  month={March},
+  doi={10.1007/s40505-025-00290-4},
+  url={https://doi.org/10.1007/s40505-025-00290-4}
 }`,
     'crawley2023svbfailure': `@techreport{crawley2023svbfailure,
   title={Failure of Silicon Valley Bank Reduced Local Consumer Spending but Had Limited Effect on Aggregate Spending},
