@@ -1,15 +1,10 @@
 // Store all BibTeX entries in one place
 const bibtexEntries = {
-    'crawley2025households': `@techreport{crawley2025households,
-  author = {Crawley, Edmund},
-  title = {Do Households Substitute Intertemporally? 10 Structural Shocks That Suggest Not},
-  institution = {Board of Governors of the Federal Reserve System},
-  series = {Finance and Economics Discussion Series},
-  number = {2025-021},
-  year = {2025},
-  address = {Washington},
-  doi = {10.17016/FEDS.2025.021},
-  url = {https://doi.org/10.17016/FEDS.2025.021}
+    'crawley2025households': `@unpublished{crawley2026household,
+  author = {Crawley, Edmund and Gamber, William},
+  title = {Household Consumption Does Not Respond Directly to Interest Rates: Evidence From 10 Macroeconomic Shocks},
+  year = {2026},
+  note = {Manuscript}
 }`,
     'crawley2024income': `@techreport{crawley2024income,
   title={Income Shocks and Their Transmission into Consumption},
