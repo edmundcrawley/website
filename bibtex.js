@@ -111,6 +111,17 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
   doi={10.1007/s40505-025-00290-4},
   url={https://doi.org/10.1007/s40505-025-00290-4}
 }`,
+    'aladangady2025debt': `@techreport{aladangady2025debt,
+  title={Debt Payments and Spending: Evidence from the 2023 Student Loan Payment Restart},
+  author={Aladangady, Aditya and Crawley, Edmund and Gamber, William and Moran, Patrick and Nino, Jose},
+  institution={Board of Governors of the Federal Reserve System},
+  type={FEDS Notes},
+  year={2025},
+  month={September},
+  day={5},
+  url={https://doi.org/10.17016/2380-7172.3879},
+  doi={10.17016/2380-7172.3879}
+}`,
     'crawley2023svbfailure': `@techreport{crawley2023svbfailure,
   title={Failure of Silicon Valley Bank Reduced Local Consumer Spending but Had Limited Effect on Aggregate Spending},
   author={Crawley, Edmund and Doh, Taeyoung and Shin, Minchul},
