@@ -1,6 +1,6 @@
 // Store all BibTeX entries in one place
 const bibtexEntries = {
-    'crawley2025households': `@techreport{crawley2026household,
+    'crawley2025households': `@techreport{crawley2025households,
   title={Household Consumption Does Not Respond Directly to Interest Rates: Evidence From 10 Macroeconomic Shocks},
   author={Crawley, Edmund and Gamber, William L.},
   year={2025},
@@ -48,7 +48,7 @@ const bibtexEntries = {
   url={https://doi.org/10.17016/FEDS.2023.002},
   doi={10.17016/FEDS.2023.002}
 }`,
-    'crawley2022parsimonious': `@article{crawley2026parsimonious,
+    'crawley2026parsimonious': `@article{crawley2026parsimonious,
   title={A Parsimonious Model of Idiosyncratic Income},
   author={Crawley, Edmund and Holm, Martin Blomhoff and Tretvoll, H{\\aa}kon},
   journal={International Economic Review},
@@ -67,7 +67,7 @@ Volume = {15},
 Number = {1},
 Year = {2023},
 Month = {January},
-Pages = {314–41},
+Pages = {314--341},
 DOI = {10.1257/mac.20200352},
 URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20200352}
 }`,
@@ -75,8 +75,10 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20200352}
 title = {In Search of Lost Time Aggregation},
 journal = {Economics Letters},
 volume = {189},
+pages = {108998},
 year = {2020},
-doi = {https://doi.org/10.1016/j.econlet.2020.108998},
+doi = {10.1016/j.econlet.2020.108998},
+url = {https://doi.org/10.1016/j.econlet.2020.108998},
 author = {Edmund Crawley}
 }`,
     'carroll2021modeling': `@article{carroll2021modeling,
@@ -98,7 +100,7 @@ Volume = {12},
 Number = {3},
 Year = {2020},
 Month = {July},
-Pages = {40–76},
+Pages = {40--76},
 DOI = {10.1257/mac.20180286},
 URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
 }`,
@@ -106,6 +108,9 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
   title={A note on the asymptotic properties of the two-sector Robinson–Solow–Srinivasan model},
   author={Crawley, Edmund},
   journal={Economic Theory Bulletin},
+  volume={13},
+  number={2},
+  pages={219--225},
   year={2025},
   month={March},
   doi={10.1007/s40505-025-00290-4},
@@ -156,15 +161,13 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
 }`,
 'carroll2018comment': `@article{carroll2018comment,
 author = {Carroll, Christopher D. and Crawley, Edmund},
-title = {Comment on When Inequality Matters for Macro and Macro Matters for Inequality. What’s Wrong with Macroeconomics, and Can This Paper Fix It?},
+title = {Comment on "When Inequality Matters for Macro and Macro Matters for Inequality"},
 journal = {NBER Macroeconomics Annual},
 volume = {32},
-number = {},
-pages = {76-92},
+pages = {76--92},
 year = {2018},
 doi = {10.1086/696047},
-URL = {https://doi.org/10.1086/696047},
-eprint = {https://doi.org/10.1086/696047}
+URL = {https://doi.org/10.1086/696047}
 }`
 };
 
