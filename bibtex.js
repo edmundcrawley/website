@@ -26,7 +26,7 @@ const bibtexEntries = {
   doi={10.17016/FEDS.2026.036}
 }`,
     'crawley2024income': `@techreport{crawley2024income,
-  title={Income Shocks and their Transmission into Consumption},
+  title={Income Shocks and Their Transmission into Consumption},
   author={Crawley, Edmund and Theloudis, Alexandros},
   year={2024},
   number={2024-038},
@@ -103,7 +103,7 @@ DOI = {10.1257/mac.20180286},
 URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
 }`,
     'crawley2025asymptotic': `@article{crawley2025asymptotic,
-  title={A Note on the Asymptotic Properties of the Two-Sector Robinson-Solow-Srinivasan Model},
+  title={A note on the asymptotic properties of the two-sector Robinson–Solow–Srinivasan model},
   author={Crawley, Edmund},
   journal={Economic Theory Bulletin},
   year={2025},
@@ -133,7 +133,7 @@ URL = {https://www.aeaweb.org/articles?id=10.1257/mac.20180286}
   url={https://www.kansascityfed.org/research/economic-bulletin/failure-of-silicon-valley-bank-reduced-local-consumer-spending-but-had-limited-effect-on-aggregate-spending/}
 }`,
     'crawley2023winners': `@techreport{crawley2023winners,
-  title={Winners and Losers from Recent Asset Price Changes},
+  title={Winners and losers from recent asset price changes},
   author={Crawley, Edmund and Gamber, William},
   institution={Board of Governors of the Federal Reserve System},
   type={FEDS Notes},
