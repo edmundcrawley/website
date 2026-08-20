@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Page Not Found &mdash; Edmund S. Crawley</title>
+
+    <link href="style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Theme detection (in head to prevent flash of wrong theme) -->
+    <script>
+        (function() {
+            var saved = localStorage.getItem('theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <div id="header">
+        <div class="container">
+            <h1>Page Not Found</h1>
+            <p>The page or file you are looking for doesn't exist &mdash; it may have been moved or renamed.</p>
+            <p>You can find all of my papers and current links on the <a href="/">home page</a>.</p>
+            <p>If you followed a link here from another site and think something is missing, feel free to <a href="mailto:edmund.s.crawley@frb.gov">email me</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
