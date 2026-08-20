@@ -38,7 +38,7 @@ const bibtexEntries = {
 }`,
     'carroll2023welfare': `@techreport{carroll2023welfare,
   title={Welfare and Spending Effects of Consumption Stimulus Policies},
-  author={Carroll, Christopher and Crawley, Edmund and Frankovic, Ivan and Tretvoll, H{\\aa}kon},
+  author={Carroll, Christopher D. and Crawley, Edmund and Frankovic, Ivan and Tretvoll, H{\\aa}kon},
   year={2023},
   month={January},
   number={2023-002},
