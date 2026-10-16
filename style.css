@@ -179,6 +179,21 @@ hr {
     filter: invert(1) hue-rotate(180deg);
 }
 
+/* Animated slide preview: the iframe follows the site theme itself, so no invert filter */
+.slide-embed-link {
+    display: block;
+}
+
+.paper-figure.slide-embed {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .paper-figure.slide-embed {
+    filter: none;
+}
+
 /* ==========================================================================
    8. Details / Summary (Abstracts, BibTeX)
    ========================================================================== */

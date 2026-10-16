@@ -149,6 +149,9 @@ svg text.mt{font-family:"STIX Two Text","Times New Roman",serif;font-style:itali
 #chrome{position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--faint)}
 #bar{height:100%;width:0;background:var(--muted);transition:width .5s ease}
 #count{position:absolute;right:128px;bottom:34px;font-size:22px;color:var(--muted);font-variant-numeric:tabular-nums}
+html.embed #chrome,html.embed #count{display:none}
+html.embed #stage{box-shadow:none}
+html.embed body{background:var(--ground)}
 #hint{position:absolute;right:128px;bottom:64px;font-size:22px;color:var(--muted);font-style:italic}
 </style>
 </head>
@@ -181,6 +184,9 @@ const NS="http://www.w3.org/2000/svg";
 const stage=document.getElementById("stage");
 /* Animations always play: a venue PC with Windows animation effects turned off would otherwise show no builds. */
 const reduced=false;
+/* "?embed=10": a looping, non-interactive preview of one slide's builds (used on the homepage) */
+const EMBED=(()=>{try{const n=parseInt(new URLSearchParams(location.search).get("embed"),10);return n>=1?n:null;}catch(e){return null;}})();
+if(EMBED)document.documentElement.classList.add("embed");
 
 /* ---------- small DOM helpers ---------- */
 function S(tag,attrs,parent){const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
@@ -1053,15 +1059,15 @@ function next(){const sc=scenes[cur];if(step<sc.n-1){step++;play(sc,"L"+(step+1)
 function prev(){const sc=scenes[cur];if(step>0){step--;play(sc,"L"+(step+1),.45);ui();}else goTo(cur-1,true);}
 function fit(){const w=window.innerWidth,h=window.innerHeight;const s=Math.min(w/1920,h/1080);gsap.set(stage,{xPercent:-50,yPercent:-50,scale:s});}
 window.addEventListener("resize",fit);fit();
-document.addEventListener("keydown",e=>{const k=e.key;
+document.addEventListener("keydown",e=>{if(EMBED)return;const k=e.key;
   if(["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(k)){e.preventDefault();next();}
   else if(["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(k)){e.preventDefault();prev();}
   else if(k==="Home")goTo(0,false);else if(k==="End")goTo(scenes.length-1,true);
   else if(k==="f"||k==="F"){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(err){}}
   else if(k==="t"||k==="T"){const r=document.documentElement,dark=getComputedStyle(r).getPropertyValue("--ground").trim()==="#142031";r.setAttribute("data-theme",dark?"light":"dark");}});
-document.addEventListener("click",e=>{if(e.clientX<window.innerWidth*0.3)prev();else next();});
+document.addEventListener("click",e=>{if(EMBED)return;if(e.clientX<window.innerWidth*0.3)prev();else next();});
 let tx=null;document.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;},{passive:true});
-document.addEventListener("touchend",e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){e.preventDefault();dx<0?next():prev();}tx=null;});
+document.addEventListener("touchend",e=>{if(EMBED)return;if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){e.preventDefault();dx<0?next():prev();}tx=null;});
 let start=0,jump=null;try{const m=location.hash.slice(1).split(".");const h=parseInt(m[0],10);if(h>=1&&h<=scenes.length)start=h-1;if(m.length>1)jump=parseInt(m[1],10);}catch(e){}
 function fitText(){document.querySelectorAll(".h2,.sub").forEach(el=>{const max=el.classList.contains("h2")?1664:1664,min=el.classList.contains("h2")?44:22;
   el.style.whiteSpace="nowrap";el.style.maxWidth="none";if(el.classList.contains("h2"))el.style.width="auto";
@@ -1069,7 +1075,17 @@ function fitText(){document.querySelectorAll(".h2,.sub").forEach(el=>{const max=
 window.__deck={scenes,goTo};
 document.documentElement.dataset.steps=scenes.map(s=>s.n).join(","); /* read by tools/export_pdf.py */
 /* "#5.3" opens scene 5 already at the end of build step 3, with no animation (for previews and screenshots) */
-const go=()=>{fitText();if(jump===null){goTo(start,false);return;}
+/* embed mode: play each build in turn, hold, and start over; the theme follows the embedding page */
+function embedLoop(i){const sc=scenes[i];cur=i;sc.el.classList.add("on");gsap.set(sc.el,{opacity:1});
+  const syncTheme=()=>{let t="light";try{if(parent.document.documentElement.getAttribute("data-theme")==="dark")t="dark";}catch(e){}document.documentElement.setAttribute("data-theme",t);};
+  syncTheme();try{new MutationObserver(syncTheme).observe(parent.document.documentElement,{attributes:true,attributeFilter:["data-theme"]});}catch(e){}
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){sc.tl.seek("L"+sc.n,false);return;}
+  const HOLD=2.5,LAST=7;let k=0;
+  const run=()=>{if(k===0){sc.tl.seek("L0",false);gsap.fromTo(sc.el,{opacity:0},{opacity:1,duration:.5});}k++;
+    sc.tl.tweenTo("L"+k,{onComplete:()=>{if(k<sc.n)gsap.delayedCall(HOLD,run);
+      else gsap.delayedCall(LAST,()=>gsap.to(sc.el,{opacity:0,duration:.6,onComplete:()=>{k=0;run();}}));}});};
+  run();}
+const go=()=>{fitText();if(EMBED&&EMBED<=scenes.length){embedLoop(EMBED-1);return;}if(jump===null){goTo(start,false);return;}
   const sc=scenes[start];cur=start;step=Math.max(0,Math.min(sc.n,jump)-1);sc.el.classList.add("on");gsap.set(sc.el,{opacity:1});sc.tl.seek("L"+Math.min(sc.n,jump),false);ui();};
 if(document.fonts&&document.fonts.ready){Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(go);}else go();
 })();
