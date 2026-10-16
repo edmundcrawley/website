@@ -184,8 +184,8 @@ const NS="http://www.w3.org/2000/svg";
 const stage=document.getElementById("stage");
 /* Animations always play: a venue PC with Windows animation effects turned off would otherwise show no builds. */
 const reduced=false;
-/* "?embed=10": a looping, non-interactive preview of one slide's builds (used on the homepage) */
-const EMBED=(()=>{try{const n=parseInt(new URLSearchParams(location.search).get("embed"),10);return n>=1?n:null;}catch(e){return null;}})();
+/* "?embed": a looping, non-interactive reel of a few slides (used on the homepage) */
+const EMBED=(()=>{try{return new URLSearchParams(location.search).has("embed");}catch(e){return false;}})();
 if(EMBED)document.documentElement.classList.add("embed");
 
 /* ---------- small DOM helpers ---------- */
@@ -913,6 +913,7 @@ scene("Example: Romer and Romer",sc=>{
   /* all ten shocks: everything but the consumption plot fades, the plot and the title shrink into the first slot, the rest fade in.
      Absolute times: GSAP reads only the first "+=" of a chained position string. */
   sc.steps.push((tl,L)=>{const s0=slot(0),T0=tl.labels[L],gone=[SUBS[4],...lab,pr.g,mr.g,py.g,my.g,gB,EQ[4],CT[4],CD[4],dY.g,dR.g,vY,vR,aR.p,aR.h,aY.p,aY.h,aC.p,aC.h,cl,ft,...LG,LN[1],LN[2]];
+    sc.embedHide=gone; /* the embed reel hides these up front, so only the title and the consumption plot enter this build */
     tl.to([...gone,...tx],{opacity:0,duration:.6,ease:"power1.out"},T0);tl.to(LN[0],{opacity:1,duration:.6},T0);
     const M1=T0+.5,mv={duration:1.1,ease:"power3.inOut"};
     tl.to(tx,{fontSize:0,...mv},M1);   /* the faded words give up their space, so the title slides left as it shrinks */
@@ -1075,17 +1076,22 @@ function fitText(){document.querySelectorAll(".h2,.sub").forEach(el=>{const max=
 window.__deck={scenes,goTo};
 document.documentElement.dataset.steps=scenes.map(s=>s.n).join(","); /* read by tools/export_pdf.py */
 /* "#5.3" opens scene 5 already at the end of build step 3, with no animation (for previews and screenshots) */
-/* embed mode: play each build in turn, hold, and start over; the theme follows the embedding page */
-function embedLoop(i){const sc=scenes[i];cur=i;sc.el.classList.add("on");gsap.set(sc.el,{opacity:1});
+/* embed mode: slide 3's first two builds run straight into all of slide 4; slide 4's consumption plot then swaps for
+   slide 10's, which goes into the ten-shock grid; hold, and start over. The theme follows the embedding page. */
+function embedReel(){const A=scenes[2],B=scenes[3],G=scenes[9],hide=G.embedHide;
   const syncTheme=()=>{let t="light";try{if(parent.document.documentElement.getAttribute("data-theme")==="dark")t="dark";}catch(e){}document.documentElement.setAttribute("data-theme",t);};
   syncTheme();try{new MutationObserver(syncTheme).observe(parent.document.documentElement,{attributes:true,attributeFilter:["data-theme"]});}catch(e){}
-  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){sc.tl.seek("L"+sc.n,false);return;}
-  const HOLD=2.5,LAST=7;let k=0;
-  const run=()=>{if(k===0){sc.tl.seek("L0",false);gsap.fromTo(sc.el,{opacity:0},{opacity:1,duration:.5});}k++;
-    sc.tl.tweenTo("L"+k,{onComplete:()=>{if(k<sc.n)gsap.delayedCall(HOLD,run);
-      else gsap.delayedCall(LAST,()=>gsap.to(sc.el,{opacity:0,duration:.6,onComplete:()=>{k=0;run();}}));}});};
-  run();}
-const go=()=>{fitText();if(EMBED&&EMBED<=scenes.length){embedLoop(EMBED-1);return;}if(jump===null){goTo(start,false);return;}
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){A.el.classList.add("on");gsap.set(A.el,{opacity:1});A.tl.seek("L2",false);return;}
+  const fade=(from,to,done)=>{if(from)gsap.to(from.el,{opacity:0,duration:.45,onComplete:()=>from.el.classList.remove("on")});
+    to.el.classList.add("on");gsap.fromTo(to.el,{opacity:0},{opacity:1,duration:.5,delay:from?.15:0,onComplete:done});};
+  const run=last=>{A.tl.seek("L0",false);fade(last,A);
+    A.tl.tweenTo("L2",{onComplete:()=>{B.tl.seek("L0",false);fade(A,B);
+      B.tl.tweenTo("L"+B.n,{onComplete:()=>gsap.delayedCall(1.2,()=>{
+        G.tl.seek("L"+(G.n-1),false);hide.forEach(e=>e.style.visibility="hidden");
+        fade(B,G,()=>gsap.delayedCall(.3,()=>G.tl.tweenTo("L"+G.n,{onComplete:()=>gsap.delayedCall(7,()=>{run(G);
+          gsap.delayedCall(.5,()=>hide.forEach(e=>e.style.visibility=""));})})));})});}});};
+  run(null);}
+const go=()=>{fitText();if(EMBED){embedReel();return;}if(jump===null){goTo(start,false);return;}
   const sc=scenes[start];cur=start;step=Math.max(0,Math.min(sc.n,jump)-1);sc.el.classList.add("on");gsap.set(sc.el,{opacity:1});sc.tl.seek("L"+Math.min(sc.n,jump),false);ui();};
 if(document.fonts&&document.fonts.ready){Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(go);}else go();
 })();
