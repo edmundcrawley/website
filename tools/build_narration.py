@@ -1,0 +1,230 @@
+"""Build the narrated version of the Ten Shocks deck.
+
+    ~/.venvs/tts/Scripts/python.exe tools/build_narration.py          # audio + page
+    ~/.venvs/tts/Scripts/python.exe tools/build_narration.py --only 7.1 4.3
+    python tools/build_narration.py --page                           # page only (stdlib)
+
+Audio: each `### slide.step` block of narration.md is read by Kokoro (voice
+bm_george) into tenshocks-narration/<slide.step>.mp3. A block is only
+re-synthesized when its text (or the voice) changes; tenshocks-narration/
+manifest.json holds the hashes and durations.
+
+Page: tenshocks-narrated.html is generated from tenshocks-slides.html (so edit
+the slides there and re-run with --page), with a player that plays each build
+step's clip and moves on when it ends.
+
+The TTS environment lives outside OneDrive:
+    uv venv --python 3.11 ~/.venvs/tts
+    uv pip install --python ~/.venvs/tts/Scripts/python.exe \
+        --extra-index-url https://download.pytorch.org/whl/cpu \
+        --index-strategy unsafe-best-match "torch>=2.6" kokoro soundfile lameenc pip
+"""
+import argparse, hashlib, json, re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+NARRATION = ROOT / "narration.md"
+DECK = ROOT / "tenshocks-slides.html"
+PAGE = ROOT / "tenshocks-narrated.html"
+AUDIO = ROOT / "tenshocks-narration"
+MANIFEST = AUDIO / "manifest.json"
+
+VOICE, LANG, SPEED = "bm_george", "b", 1.0
+RATE = 24000
+LEAD, GAP_PARA, TAIL = 0.15, 0.45, 0.25  # seconds of silence
+
+# How the voice says names and terms (the lexicon at the end of narration.md),
+# as Kokoro/misaki phonemes. Order matters: longer patterns first.
+LEXICON = [
+    (r"\btheta-R\b", "[theta](/θˈAtə/) [R](/ˈɑː/)"),
+    (r"\btheta-Y\b", "[theta](/θˈAtə/) [Y](/wˈI/)"),
+    (r"\btheta\b", "[theta](/θˈAtə/)"),
+    (r"\bHANK\b", "[HANK](/hˈæŋk/)"),
+    (r"\bRANK\b", "[RANK](/ɹˈæŋk/)"),
+    (r"\bVAR\b", "[V](/vˈiː/) [A](/ˈA/) [R](/ˈɑː/)"),
+    (r"\bMIT\b", "[M](/ˈɛm/) [I](/ˈI/) [T](/tˈiː/)"),
+    (r"\bB-splines\b", "[B](/bˈiː/) splines"),
+    (r"\bEuler\b", "[Euler](/ˈɔɪləɹ/)"),
+    (r"\bCrawley\b", "[Crawley](/kɹˈɔːli/)"),
+    (r"\bGamber\b", "[Gamber](/ɡˈæmbə/)"),
+    (r"\bSlacalek\b", "[Slacalek](/slˈɑːkəlɛk/)"),
+    (r"\bFagereng\b", "[Fagereng](/fˈɑːɡəɹɛŋ/)"),
+    (r"\bNatvik\b", "[Natvik](/nˈɑːtviːk/)"),
+    (r"\bViolante\b", "[Violante](/viːoʊlˈænteɪ/)"),
+    (r"\bRamey\b", "[Ramey](/ɹˈAmi/)"),
+    (r"\bGertler\b", "[Gertler](/ɡˈɜːtlə/)"),
+    (r"\bKaradi\b", "[Karadi](/kəɹˈɑːdi/)"),
+    (r"\bPerotti\b", "[Perotti](/pəɹˈɒti/)"),
+    (r"\bBlanchard\b", "[Blanchard](/blɑːnʃˈɑːd/)"),
+    (r"\bMertens\b", "[Mertens](/mˈɜːtənz/)"),
+    (r"\bRavn\b", "[Ravn](/ɹˈɑːvən/)"),
+    (r"\bLeeper\b", "[Leeper](/lˈiːpə/)"),
+]
+
+
+def blocks():
+    """{'4.3': [paragraph, ...]} from the ### blocks of narration.md."""
+    out, key, lines = {}, None, []
+    def flush():
+        if key:
+            paras = [" ".join(p.split()) for p in "\n".join(lines).split("\n\n")]
+            out[key] = [p for p in paras if p]
+    for line in NARRATION.read_text(encoding="utf-8").splitlines():
+        m = re.match(r"###\s+(\d+\.\d+)\b", line)
+        if m or line.startswith("## ") or line.strip() == "---":
+            flush(); key, lines = (m.group(1) if m else None), []
+        elif key:
+            lines.append(line)
+    flush()
+    return out
+
+
+def speakable(p):
+    for pat, rep in LEXICON:
+        p = re.sub(pat, rep, p)
+    return p
+
+
+def build_audio(only):
+    import numpy as np, lameenc
+    from kokoro import KPipeline
+    AUDIO.mkdir(exist_ok=True)
+    man = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    todo = {}
+    for k, paras in blocks().items():
+        text = [speakable(p) for p in paras]
+        h = hashlib.sha1(json.dumps([VOICE, SPEED, text]).encode()).hexdigest()[:12]
+        stale = man.get(k, {}).get("hash") != h or not (AUDIO / f"{k}.mp3").exists()
+        if (only and k in only) or (not only and stale):
+            todo[k] = (text, h)
+    pipe = KPipeline(lang_code=LANG, repo_id="hexgrad/Kokoro-82M") if todo else None
+    sil = lambda s: np.zeros(int(s * RATE), dtype=np.float32)
+    for k, (text, h) in todo.items():
+        parts = [sil(LEAD)]
+        for i, p in enumerate(text):
+            if i: parts.append(sil(GAP_PARA))
+            parts += [a.numpy() for _, _, a in pipe(p, voice=VOICE, speed=SPEED)]
+        parts.append(sil(TAIL))
+        audio = np.concatenate(parts)
+        enc = lameenc.Encoder()
+        enc.set_bit_rate(64); enc.set_in_sample_rate(RATE); enc.set_channels(1); enc.set_quality(2)
+        pcm = (np.clip(audio, -1, 1) * 32767).astype(np.int16).tobytes()
+        (AUDIO / f"{k}.mp3").write_bytes(enc.encode(pcm) + enc.flush())
+        man[k] = {"hash": h, "dur": round(len(audio) / RATE, 2)}
+        MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=True))
+        print(f"{k:>5}  {man[k]['dur']:6.1f}s", flush=True)
+    known = set(blocks())
+    for k in [k for k in man if k not in known]:
+        del man[k]; (AUDIO / f"{k}.mp3").unlink(missing_ok=True)
+    MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=True))
+    print(f"total {sum(v['dur'] for v in man.values())/60:.1f} min, {len(man)} clips")
+
+
+# ---------------------------------------------------------------- page
+
+def patch(html, old, new):
+    assert html.count(old) == 1, f"anchor not found exactly once: {old[:60]}"
+    return html.replace(old, new)
+
+
+PLAYER = r"""
+<style>
+#nv{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+  background:var(--ground);color:var(--fg);text-align:center;padding:16px;cursor:pointer}
+#nv h1{font-size:clamp(22px,3.4vw,44px);font-weight:500;margin:0;max-width:22em;line-height:1.2}
+#nv button{font:inherit;font-size:clamp(18px,2vw,26px);padding:.55em 1.4em;border-radius:999px;border:0;cursor:pointer;
+  background:var(--fg);color:var(--ground)}
+#nv p{margin:0;color:var(--muted);font-size:clamp(14px,1.4vw,19px)}
+#nv[hidden]{display:none}
+#np{position:absolute;left:128px;bottom:26px;width:44px;height:44px;border-radius:50%;border:2px solid var(--muted);
+  background:none;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0;opacity:.7}
+#np:hover{opacity:1}
+</style>
+<div id="nv" role="dialog" aria-label="Start the narrated talk">
+  <h1>Household Consumption Does Not Respond Directly to Interest Rates</h1>
+  <button id="nvb" type="button">&#9654;&#xFE0E; Play narrated talk</button>
+  <p id="nvt">Space pauses &middot; &larr; &rarr; skip &middot; F for full screen</p>
+</div>
+<script>
+(()=>{
+const DIR="tenshocks-narration/",CLIPS=__CLIPS__,GAP=600,D=window.__deck;
+const a=new Audio();a.preload="auto";
+const ov=document.getElementById("nv"),ob=document.getElementById("nvb"),ot=document.getElementById("nvt");
+const np=document.createElement("button");np.id="np";np.type="button";np.setAttribute("aria-label","Pause");
+document.getElementById("stage").appendChild(np);
+let on=false,started=false,key=null,timer=null;
+const mins=Math.round(Object.values(CLIPS).reduce((s,d)=>s+d,0)/60);
+ot.textContent="About "+mins+" minutes · "+ot.textContent;
+const keyAt=(c,s)=>(c+1)+"."+(s+1);
+function nextKey(){const sc=D.scenes[D.cur];return D.step<sc.n-1?keyAt(D.cur,D.step+1):D.cur<D.scenes.length-1?keyAt(D.cur+1,0):null;}
+const atEnd=()=>D.cur===D.scenes.length-1&&D.step===D.scenes[D.cur].n-1;
+function icon(){np.textContent=on?"❚❚":"▶︎";np.setAttribute("aria-label",on?"Pause":"Play");}
+function stopTimer(){clearTimeout(timer);timer=null;}
+function load(){stopTimer();const k=keyAt(D.cur,D.step);if(k===key)return;key=k;
+  if(!(k in CLIPS)){a.removeAttribute("src");if(on)advance();return;}
+  a.src=DIR+k+".mp3";if(on)a.play().catch(()=>{});
+  const n=nextKey();if(n&&n in CLIPS)fetch(DIR+n+".mp3").catch(()=>{});}
+function advance(){stopTimer();if(!on)return;
+  if(D.busy){timer=setTimeout(advance,150);return;}  /* let the build animation finish */
+  if(atEnd()){finish();return;}
+  timer=setTimeout(()=>{timer=null;if(on)D.next();},GAP);}
+function finish(){on=false;icon();ob.innerHTML="&#8635; Watch again";ot.textContent="Thanks for listening.";ov.hidden=false;}
+function play(){on=true;icon();gsap.globalTimeline.resume();
+  if(!ours()||a.ended)advance();else a.play().catch(()=>{});}
+function pause(){on=false;icon();stopTimer();a.pause();gsap.globalTimeline.pause();}
+const ours=()=>(a.getAttribute("src")||"").startsWith(DIR);  /* not the silent unlock clip */
+a.addEventListener("ended",()=>{if(ours())advance();});
+a.addEventListener("error",()=>{if(ours())advance();});
+window.addEventListener("deckstep",()=>{if(started)load();});
+function begin(e){e.stopPropagation();ov.hidden=true;
+  /* unlock audio inside the click, for Safari */
+  a.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=";a.play().catch(()=>{});
+  on=true;icon();key=null;
+  if(started){D.goTo(0,false);return;}
+  started=true;window.__deckStart();}
+ov.addEventListener("click",begin);
+np.addEventListener("click",e=>{e.stopPropagation();on?pause():play();});
+window.addEventListener("keydown",e=>{
+  if(!ov.hidden){if([" ","Enter"].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();begin(e);}
+    else if(!["f","F","t","T"].includes(e.key))e.stopImmediatePropagation();return;}
+  if(e.key===" "||e.key==="k"||e.key==="K"){e.preventDefault();e.stopImmediatePropagation();on?pause():play();}},true);
+icon();
+})();
+</script>
+"""
+
+
+def build_page():
+    man = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    html = DECK.read_text(encoding="utf-8")
+    html = re.sub(r"<title>(.*?)</title>", r"<title>\1 (narrated)</title>", html, count=1)
+    # let the player see each step change, the deck's state, and whether a build is still animating
+    html = patch(html, "function ui(){", 'function ui(){queueMicrotask(()=>window.dispatchEvent(new Event("deckstep")));')
+    html = patch(html, "window.__deck={scenes,goTo};",
+                 "window.__deck={scenes,goTo,next,prev,get cur(){return cur},get step(){return step},"
+                 "get busy(){return !!(active&&active.isActive())}};")
+    # "#4.3" starts at the end of step 2 and animates step 3, so its clip plays with the build
+    html = patch(html,
+        'const sc=scenes[start];cur=start;step=Math.max(0,Math.min(sc.n,jump)-1);sc.el.classList.add("on");'
+        'gsap.set(sc.el,{opacity:1});sc.tl.seek("L"+Math.min(sc.n,jump),false);ui();};',
+        'const sc=scenes[start],j=Math.max(1,Math.min(sc.n,jump));if(j===1){goTo(start,false);return;}'
+        'cur=start;step=j-2;sc.el.classList.add("on");gsap.set(sc.el,{opacity:1});sc.tl.seek("L"+(j-1),false);next();};')
+    # wait for the Play click instead of starting on load
+    html = patch(html,
+        "if(document.fonts&&document.fonts.ready){Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(go);}else go();",
+        "window.__deckStart=()=>(document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,"
+        "new Promise(r=>setTimeout(r,1500))]):Promise.resolve()).then(go);")
+    clips = json.dumps({k: v["dur"] for k, v in sorted(man.items())})
+    html = patch(html, "</body>", PLAYER.replace("__CLIPS__", clips) + "</body>")
+    PAGE.write_text(html, encoding="utf-8")
+    print(f"wrote {PAGE.name} ({len(man)} clips)")
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", nargs="*", help="re-synthesize just these blocks, e.g. 7.1 4.3")
+    ap.add_argument("--page", action="store_true", help="only rebuild the HTML page")
+    args = ap.parse_args()
+    if not args.page:
+        build_audio(set(args.only or []))
+    build_page()
