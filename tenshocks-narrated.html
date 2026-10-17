@@ -1098,6 +1098,7 @@ window.__deckStart=()=>(document.fonts&&document.fonts.ready?Promise.race([docum
 </script>
 
 <style>
+html,body{touch-action:manipulation}
 #nv{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
   background:var(--ground);color:var(--fg);text-align:center;padding:16px;cursor:pointer}
 #nv h1{font-size:clamp(22px,3.4vw,44px);font-weight:500;margin:0;max-width:22em;line-height:1.2}
@@ -1105,31 +1106,59 @@ window.__deckStart=()=>(document.fonts&&document.fonts.ready?Promise.race([docum
   background:var(--fg);color:var(--ground)}
 #nv p{margin:0;color:var(--muted);font-size:clamp(14px,1.4vw,19px)}
 #nv[hidden]{display:none}
-#np{position:absolute;left:128px;bottom:26px;width:44px;height:44px;border-radius:50%;border:2px solid var(--muted);
-  background:none;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0;opacity:.7}
-#np:hover{opacity:1}
+/* control bar: real pixels, outside the scaled stage */
+#nc{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;
+  display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .35s;font-family:system-ui,sans-serif}
+#nc[hidden]{display:none}
+#nc.hide{opacity:0;pointer-events:none}
+#ncb{display:flex;align-items:center;gap:6px;padding:6px 14px 6px 6px;border-radius:999px;background:var(--ground);
+  box-shadow:0 4px 18px rgba(0,0,0,.18);border:1px solid var(--faint)}
+#ncb button{width:44px;height:44px;border:0;border-radius:50%;background:none;color:var(--fg);font-size:17px;cursor:pointer;padding:0}
+#ncb button:hover{background:var(--faint)}
+#ncb #ncp{width:52px;height:52px;background:var(--fg);color:var(--ground);font-size:19px}
+#nct{margin-left:6px;color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#nr{display:none;color:var(--muted);font-size:14px;text-align:center}
+@media (orientation:portrait){#nc.hide{opacity:1;pointer-events:auto}}
+@media (orientation:portrait) and (pointer:coarse){#nr{display:block}}
 </style>
 <div id="nv" role="dialog" aria-label="Start the narrated talk">
   <h1>Household Consumption Does Not Respond Directly to Interest Rates</h1>
   <button id="nvb" type="button">&#9654;&#xFE0E; Play narrated talk</button>
   <p id="nvt">Space pauses &middot; &larr; &rarr; skip &middot; F for full screen</p>
 </div>
+<div id="nc" hidden>
+  <div id="nr">&#8635; Turn your phone sideways for a bigger view</div>
+  <div id="ncb">
+    <button id="ncl" type="button" aria-label="Back">&#9198;&#xFE0E;</button>
+    <button id="ncp" type="button" aria-label="Pause"></button>
+    <button id="ncn" type="button" aria-label="Forward">&#9197;&#xFE0E;</button>
+    <span id="nct"></span>
+  </div>
+</div>
 <script>
 (()=>{
 const DIR="tenshocks-narration/",CLIPS={"1.1": 30.23, "10.1": 11.75, "10.2": 41.25, "10.3": 7.4, "10.4": 9.22, "10.5": 13.12, "10.6": 40.2, "11.1": 74.15, "12.1": 18.2, "12.2": 35.45, "13.1": 10.8, "13.2": 10.68, "13.3": 13.5, "13.4": 12.07, "14.1": 8.97, "14.2": 16.95, "14.3": 9.12, "14.4": 25.6, "2.1": 26.45, "2.2": 26.62, "2.3": 19.5, "2.4": 17.93, "3.1": 31.73, "3.2": 48.23, "3.3": 35.17, "4.1": 43.45, "4.2": 11.65, "4.3": 10.55, "4.4": 5.78, "4.5": 8.4, "4.6": 11.22, "4.7": 5.97, "4.8": 9.07, "5.1": 23.45, "5.2": 37.58, "6.1": 33.45, "6.2": 42.42, "6.3": 25.95, "7.1": 60.02, "8.1": 27.0, "8.2": 39.88, "8.3": 24.38, "9.1": 18.62, "9.2": 43.45},GAP=600,D=window.__deck;
 const a=new Audio();a.preload="auto";
-const ov=document.getElementById("nv"),ob=document.getElementById("nvb"),ot=document.getElementById("nvt");
-const np=document.createElement("button");np.id="np";np.type="button";np.setAttribute("aria-label","Pause");
-document.getElementById("stage").appendChild(np);
-let on=false,started=false,key=null,timer=null;
-const mins=Math.round(Object.values(CLIPS).reduce((s,d)=>s+d,0)/60);
-ot.textContent="About "+mins+" minutes · "+ot.textContent;
+const $=id=>document.getElementById(id);
+const ov=$("nv"),ob=$("nvb"),ot=$("nvt"),nc=$("nc"),np=$("ncp"),nt=$("nct");
+const touch=matchMedia("(pointer:coarse)").matches;
+let on=false,started=false,key=null,timer=null,hideT=null;
+/* clip start times, for the elapsed / total readout */
+const KEYS=Object.keys(CLIPS).sort((x,y)=>{const [a1,b1]=x.split(".").map(Number),[a2,b2]=y.split(".").map(Number);return a1-a2||b1-b2;});
+const START={};let TOTAL=0;KEYS.forEach(k=>{START[k]=TOTAL;TOTAL+=CLIPS[k];});
+const mmss=t=>Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0");
+ot.textContent="About "+Math.round(TOTAL/60)+" minutes · "+(touch?"Swipe to skip":ot.textContent);
+function time(){if(!started)return;const k=(D.cur+1)+"."+(D.step+1),t=(START[k]||0)+(ours()?a.currentTime:0);
+  nt.textContent=(D.cur+1)+"/"+D.scenes.length+" · "+mmss(t)+" / "+mmss(TOTAL);}
 const keyAt=(c,s)=>(c+1)+"."+(s+1);
 function nextKey(){const sc=D.scenes[D.cur];return D.step<sc.n-1?keyAt(D.cur,D.step+1):D.cur<D.scenes.length-1?keyAt(D.cur+1,0):null;}
 const atEnd=()=>D.cur===D.scenes.length-1&&D.step===D.scenes[D.cur].n-1;
-function icon(){np.textContent=on?"❚❚":"▶︎";np.setAttribute("aria-label",on?"Pause":"Play");}
+const ours=()=>(a.getAttribute("src")||"").startsWith(DIR);  /* not the silent unlock clip */
+function icon(){np.innerHTML=on?"&#10074;&#10074;":"&#9654;&#xFE0E;";np.setAttribute("aria-label",on?"Pause":"Play");}
+/* controls: always shown while paused; while playing they fade after a few seconds */
+function show(){nc.classList.remove("hide");clearTimeout(hideT);if(on)hideT=setTimeout(()=>nc.classList.add("hide"),3000);}
 function stopTimer(){clearTimeout(timer);timer=null;}
-function load(){stopTimer();const k=keyAt(D.cur,D.step);if(k===key)return;key=k;
+function load(){stopTimer();time();const k=keyAt(D.cur,D.step);if(k===key)return;key=k;
   if(!(k in CLIPS)){a.removeAttribute("src");if(on)advance();return;}
   a.src=DIR+k+".mp3";if(on)a.play().catch(()=>{});
   const n=nextKey();if(n&&n in CLIPS)fetch(DIR+n+".mp3").catch(()=>{});}
@@ -1137,26 +1166,38 @@ function advance(){stopTimer();if(!on)return;
   if(D.busy){timer=setTimeout(advance,150);return;}  /* let the build animation finish */
   if(atEnd()){finish();return;}
   timer=setTimeout(()=>{timer=null;if(on)D.next();},GAP);}
-function finish(){on=false;icon();ob.innerHTML="&#8635; Watch again";ot.textContent="Thanks for listening.";ov.hidden=false;}
-function play(){on=true;icon();gsap.globalTimeline.resume();
+function finish(){on=false;icon();show();ob.innerHTML="&#8635; Watch again";ot.textContent="Thanks for listening.";ov.hidden=false;nc.hidden=true;
+  try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}}
+function play(){on=true;icon();show();gsap.globalTimeline.resume();
   if(!ours()||a.ended)advance();else a.play().catch(()=>{});}
-function pause(){on=false;icon();stopTimer();a.pause();gsap.globalTimeline.pause();}
-const ours=()=>(a.getAttribute("src")||"").startsWith(DIR);  /* not the silent unlock clip */
+function pause(){on=false;icon();show();stopTimer();a.pause();gsap.globalTimeline.pause();}
+const toggle=()=>on?pause():play();
 a.addEventListener("ended",()=>{if(ours())advance();});
 a.addEventListener("error",()=>{if(ours())advance();});
+a.addEventListener("timeupdate",time);
 window.addEventListener("deckstep",()=>{if(started)load();});
-function begin(e){e.stopPropagation();ov.hidden=true;
+function begin(e){e.stopPropagation();ov.hidden=true;nc.hidden=false;
   /* unlock audio inside the click, for Safari */
   a.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=";a.play().catch(()=>{});
-  on=true;icon();key=null;
+  /* phones: full screen and landscape where the browser allows it (Android; not iPhone Safari) */
+  if(touch){try{const r=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
+    if(r)r.then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock("landscape")).catch(()=>{});}catch(err){}}
+  on=true;icon();show();key=null;
   if(started){D.goTo(0,false);return;}
   started=true;window.__deckStart();}
 ov.addEventListener("click",begin);
-np.addEventListener("click",e=>{e.stopPropagation();on?pause():play();});
+nc.addEventListener("click",e=>{e.stopPropagation();show();});
+np.addEventListener("click",toggle);
+$("ncl").addEventListener("click",()=>D.prev());
+$("ncn").addEventListener("click",()=>D.next());
+/* on touch screens a tap shows or hides the controls instead of skipping; swipes still skip */
+window.addEventListener("click",e=>{if(!touch||!ov.hidden||nc.contains(e.target))return;e.stopPropagation();
+  if(nc.classList.contains("hide"))show();else if(on){clearTimeout(hideT);nc.classList.add("hide");}},true);
+document.addEventListener("mousemove",()=>{if(started&&ov.hidden)show();});
 window.addEventListener("keydown",e=>{
   if(!ov.hidden){if([" ","Enter"].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();begin(e);}
     else if(!["f","F","t","T"].includes(e.key))e.stopImmediatePropagation();return;}
-  if(e.key===" "||e.key==="k"||e.key==="K"){e.preventDefault();e.stopImmediatePropagation();on?pause():play();}},true);
+  if(e.key===" "||e.key==="k"||e.key==="K"){e.preventDefault();e.stopImmediatePropagation();toggle();}},true);
 icon();
 })();
 </script>
