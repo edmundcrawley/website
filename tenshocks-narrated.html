@@ -117,6 +117,8 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{height:100%;margin:0}
 body{background:var(--letterbox);overflow:hidden;font-family:"Newsreader",Georgia,"Times New Roman",serif;color:var(--fg);-webkit-font-smoothing:antialiased;cursor:default;user-select:none;-webkit-user-select:none}
 #stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;background:var(--ground);transform-origin:50% 50%;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.25)}
+/* phones/tablets: a fixed stage stops Android Chrome zooming the page out to fit the unscaled 1920px canvas */
+@media (pointer:coarse){#stage{position:fixed}}
 .scene{position:absolute;inset:0;opacity:0;visibility:hidden}
 .scene.on{visibility:visible}
 .scene svg.sv{position:absolute;inset:0;width:1920px;height:1080px;overflow:visible}
