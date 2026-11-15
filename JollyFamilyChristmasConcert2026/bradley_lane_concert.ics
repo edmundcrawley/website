@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Bradley Lane//Concert invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:bradley-lane-concert-2026@bradleylane
+DTSTAMP:20261114T120000Z
+DTSTART;TZID=America/New_York:20261219T160000
+DTEND;TZID=America/New_York:20261219T180000
+SUMMARY:The Fourth Annual Bradley Lane Jolly Family Christmas Concert
+LOCATION:4105 Bradley Lane\, Chevy Chase\, MD
+DESCRIPTION:Bring an instrument! RSVP: edmundcrawley@gmail.com
+END:VEVENT
+END:VCALENDAR
