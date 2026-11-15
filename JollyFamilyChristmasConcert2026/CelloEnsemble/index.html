@@ -81,14 +81,14 @@
 <header>
   <div class="k">BRADLEY LANE · CHRISTMAS 2026</div>
   <h1>Cello Ensemble</h1>
-  <p>Three arrangements for 4–8 cellos of every level, from open strings to thumb position. Find your part, print it, practise along with the audio.</p>
+  <p>Three arrangements for 4–8 cellos of every level, from open strings to confident readers. No thumb position needed. Find your part, print it, practise along with the audio.</p>
   <nav><a href="#carol">Carol of the Bells</a><a href="#deck">Deck the Halls</a><a href="#trepak">Russian Dance</a></nav>
 </header>
 
 <div class="how">
   <h2>How to use this page</h2>
   <ul>
-    <li><strong>Find your cello number</strong>, then open your part (PDF) and print it. Parts marked <span class="lv be">Beginner</span> have note names and finger numbers on every note. Parts marked <span class="lv ex">Expert</span> include thumb position.</li>
+    <li><strong>Find your cello number</strong>, then open your part (PDF) and print it. Parts marked <span class="lv be">Beginner</span> have note names and finger numbers on every note. Parts marked <span class="lv ex">Expert</span> stay in the neck positions (nothing above B on the A string).</li>
     <li><strong>Practice tracks</strong> play your part loud with everyone else quiet, after one bar of clicks to count you in. Start with the <em>slow</em> version.</li>
     <li>The audio is computer-generated, so use it for notes and timing, not for tone.</li>
     <li>If you'd rather practise offline, tap a track and use the player's ⋮ menu (or right-click the button) to download it.</li>
@@ -113,8 +113,8 @@ const PIECES = [
     meta: "G minor · 3/4 · ♩ = 132 · about 1:35", slow: "slow-100bpm", slowLabel: "Slow (100)",
     tag: "Leontovych's choral setting, the version everyone knows, with each choir voice given to a cello. A beginner bell figure and open strings sit underneath.",
     parts: [
-      ["ex", "Expert", "Soprano line: the bell figure from bar 1, and the high “ding dong” lines. Treble clef, up to G5."],
-      ["ex", "Expert", "Alto line. Treble clef, D4–B♭4. Takes over the bell figure at B."],
+      ["ex", "Expert", "Soprano line: the bell figure from bar 1, and the “ding dong” lines (an octave lower than the choir, to stay out of thumb position). Treble clef, up to B♭4."],
+      ["ex", "Expert", "Alto line. Treble clef, G3–B♭4. Takes over the bell figure at B."],
       ["ex", "Advanced", "Tenor line. Bass clef, G3–G4, up to 4th position."],
       ["be", "Beginner · reads 1st pos.", "Bass line, an octave down. C and G strings only."],
       ["be", "Beginner · 1st position", "The bell figure B♭–A–B♭–G, one bar repeated throughout. Fingers 2-1-2-0 on the G string."],
@@ -131,14 +131,15 @@ const PIECES = [
       "Beginners mostly support here and don't get a big solo moment.",
       "Cello 5's ostinato must never drift. At 132 it's easy to rush, and if it wobbles everyone wobbles.",
       "The quiet openings (p) need bow control. A nervous group tends to play everything mf.",
+      "The high “ding dong” climax is an octave lower than the choir sings it, so the loudest moment is less bright than the version people know.",
       "Cellos 1 and 2 are in treble clef. Check your experts are comfortable reading it.",
     ] },
   { id: "deck", dir: "deck-the-halls", title: "Deck the Halls", accent: "#5f9e6e",
     meta: "G major · 4/4 · ♩ = 112 · about 2:00", slow: "slow-80bpm", slowLabel: "Slow (80)",
-    tag: "Call and response. The experts play each sung line, then stop dead. The beginners answer alone with the “fa la la”. Each verse the experts get flashier. Everyone plays the last line together.",
+    tag: "Call and response. The experts play each sung line, then stop dead. The beginners answer alone with the “fa la la”. Each verse the experts add more. Everyone plays the last line together.",
     parts: [
-      ["ex", "Expert", "The tune (the calls). Up the octave from verse 2, in thumb position from bar 19. Ends on a top G."],
-      ["ex", "Expert", "Harmony, then fast G-major scale runs into the answers, then a thumb-position descant in verse 3."],
+      ["ex", "Expert", "The tune (the calls), in the cello's comfortable middle register. Bass clef, G3–G4."],
+      ["ex", "Expert", "Harmony, then fast G-major scale runs into the answers, then a descant above the tune in verse 3. Bass clef, up to G4."],
       ["ex", "Advanced", "Bass line; G-major scale runs in verse 3 and the coda. 1st position."],
       ["be", "Beginner · reads 1st pos.", "<strong>The “fa la la” answers</strong>, the beginners' feature. Plays the whole last line in the coda."],
       ["be", "Beginner · 1st position", "Harmony under the answers: long notes, fingers 1, 3, 4 only."],
@@ -162,9 +163,9 @@ const PIECES = [
     meta: "G major · 2/4 · ♩ = 120 → 152 · about 1:20", slow: "slow-84bpm", slowLabel: "Slow (84)",
     tag: "Tchaikovsky's Nutcracker showstopper. The experts play the fiery tune and the accelerating finish. The beginners are the engine: loud, accented open strings on every beat.",
     parts: [
-      ["ex", "Expert", "The tune at violin pitch: fast 16th turns, octave stabs, and the coda up to D6. Treble clef. An octave-lower option is printed for the coda."],
-      ["ex", "Expert", "The tune an octave lower, plus Tchaikovsky's chromatic inner line in the middle section. <strong>Tenor clef</strong>."],
-      ["ex", "Advanced", "Off-beat “pah”s, the tune two octaves down, and the bass tune in the middle section. Uses an F♯2 extension."],
+      ["ex", "Expert", "The tune, an octave below the violins: fast 16th turns, octave stabs and the accelerating coda. Tenor clef, up to B4."],
+      ["ex", "Expert", "The tune an octave below Cello 1, plus Tchaikovsky's chromatic inner line in the middle section. Bass clef; F♯2 extension."],
+      ["ex", "Advanced", "Off-beat “pah”s, the tune with Cello 2, and the bass tune in the middle section. Uses an F♯2 extension."],
       ["be", "Beginner · reads 1st pos.", "Bass line: harmony roots and a little stepwise tune. All four strings."],
       ["be", "Beginner · 1st position", "On-the-beat bass notes, mostly quarters, using seven notes: G A B C D E F♯."],
       ["be", "Beginner · open strings", "Stamping open G, D and A. Plucked in the middle section. Ends with the final two hits."],
@@ -177,8 +178,9 @@ const PIECES = [
       "Notes taken from a full piano score and checked note by note.",
     ],
     warn: [
-      "<strong>Cello 1's ending is very hard</strong>: fast, up to D6, and getting faster. Decide early whether to use the octave-lower option.",
-      "Cello 2 is in tenor clef. Check your second expert reads it comfortably (it can be switched to bass clef).",
+      "Cello 1's ending is still the hardest bit of the set: fast 16ths that keep getting faster. It no longer goes high.",
+      "Cello 1 is in tenor clef. Check your lead expert reads it comfortably (it can be switched to bass clef).",
+      "The tune is an octave lower than Tchaikovsky wrote it, so it sounds warmer and less brilliant than the orchestra.",
       "These beginner parts are busier than in the other two pieces: Cello 5 uses seven notes, Cello 4 crosses all four strings, and Cello 6 switches between plucking and bowing.",
       "It starts at 120, slower than orchestras play it (about 150), so the opening may sound a bit tame. The speed-up has to be led firmly by the conductor.",
       "One repeat of the tune is cut to keep it short.",
