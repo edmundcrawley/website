@@ -1,5 +1,13 @@
 // Store all BibTeX entries in one place
 const bibtexEntries = {
+    'crawley2026stimulus': `@unpublished{crawley2026stimulus,
+  title={When Stimulus Shows Up: Measurement and the Micro-Macro Consumption Puzzle},
+  author={Crawley, Edmund and Gamber, William L. and Goodwin, William},
+  year={2026},
+  month={November},
+  note={Working paper},
+  url={https://edmundcrawley.com/WhenStimulusShowsUp.pdf}
+}`,
     'crawley2025households': `@techreport{crawley2025households,
   title={Household Consumption Does Not Respond Directly to Interest Rates: Evidence From 10 Macroeconomic Shocks},
   author={Crawley, Edmund and Gamber, William L.},
